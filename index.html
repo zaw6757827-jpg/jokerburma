@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER BURMA</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+        .header-container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .brand-title {
+            font-size: 26px;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #ffeb3b, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(255, 152, 0, 0.4);
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .history-icon-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            transition: opacity 0.2s;
+        }
+        .history-icon-btn:active {
+            opacity: 0.7;
+        }
+        .stats-row {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            padding: 0 5px;
+        }
+        .chip-wrapper {
+            position: relative;
+            width: 190px;
+            height: 190px;
+            margin: 10px auto 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .gold-chip {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg, 
+                #ffd700 0deg, #ffd700 40deg, 
+                #111111 40deg, #111111 90deg, 
+                #ffd700 90deg, #ffd700 130deg, 
+                #111111 130deg, #111111 180deg, 
+                #ffd700 180deg, #ffd700 220deg, 
+                #222222 220deg, #222222 270deg, 
+                #ffd700 270deg, #ffd700 310deg, 
+                #222222 310deg, #222222 360deg
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.9);
+            border: 4px solid #1a1a1a;
+        }
+        .chip-spinning {
+            animation: rotateChip 15s linear infinite;
+        }
+        .chip-stopped {
+            animation: none !important;
+        }
+        @keyframes rotateChip {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .chip-inner {
+            width: 78%;
+            height: 78%;
+            background: #0a0a0a;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+            border: 2px solid #ffd700;
+            animation: counterRotate 15s linear infinite;
+        }
+        .chip-stopped-inner {
+            animation: none !important;
+        }
+        @keyframes counterRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        .chip-number {
+            font-size: 72px;
+            font-weight: 700;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            font-style: italic;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 15px rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+        }
+        .blinking {
+            animation: smoothBlinking 1.8s ease-in-out infinite;
+        }
+        @keyframes smoothBlinking {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.15; }
+        }
+        .status-time {
+            font-size: 15px;
+            font-weight: bold;
+            color: #ddd;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .cards-grid {
+            width: 100%;
+            max-width: 420px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .card-box {
+            background: radial-gradient(circle, #1c1c1c 0%, #0a0a0a 100%);
+            border: 2px solid #d4af37;
+            border-radius: 12px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
+        }
+        .card-top-text {
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            font-style: italic;
+            color: #ffeb3b;
+        }
+        .card-center-icon {
+            text-align: center;
+            font-size: 26px;
+        }
+        .card-bottom-time {
+            font-size: 12px;
+            color: #ccc;
+            text-align: right;
+            font-weight: bold;
+        }
+        .footer-banner {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #ffc107;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .footer-banner hr {
+            flex: 1;
+            border: none;
+            height: 1px;
+            background: #d4af37;
+        }
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .admin-content {
+            background: #181818;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(255,193,7,0.4);
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #ffffff;
+        }
+        .admin-content h2 {
+            color: #ffeb3b;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #ffeb3b;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            background-color: #ffeb3b !important;
+            border: 2px solid #ff9800 !important;
+            color: #000000 !important;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        select option {
+            background-color: #ffeb3b;
+            color: #000000;
+            padding: 5px;
+        }
+        .btn-primary {
+            background: #ffc107;
+            color: #000;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+        .btn-secondary {
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .slot-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .slot-row span {
+            width: 50px;
+            font-size: 13px;
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+        #historyFullScreen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px 15px;
+            flex-direction: column;
+            align-items: center;
+        }
+        .history-header {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .history-back-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .history-page-title {
+            font-size: 26px;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #fff;
+        }
+        .history-date-section {
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 25px;
+        }
+        .history-date-title {
+            text-align: center;
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .history-card-box {
+            background: #1c1c1c;
+            border: none;
+            border-radius: 12px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .history-card-top {
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            font-style: italic;
+            color: #fff;
+        }
+        .history-card-center {
+            text-align: center;
+            font-size: 24px;
+        }
+        .history-card-bottom {
+            font-size: 12px;
+            color: #aaa;
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header-container">
+      <div class="brand-title" id="brandTitleElem" title="4 စက္ကန့် ဖိနှိပ်ပါ">JOKER BURMA</div>
+      <button class="history-icon-btn" onclick="openHistoryModal()" title="မှတ်တမ်းကြည့်ရန်">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v5h5"></path>
+          <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"></path>
+          <path d="M12 7v5l4 2"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Stats -->
+    <div class="stats-row">
+      <span id="setValue">SET: 3739.5</span>
+      <span id="valueNum">VALUE: 3845.1</span>
+    </div>
+    <!-- Main Gold Chip / Live Display -->
+    <div class="chip-wrapper">
+      <div class="gold-chip" id="goldChipContainer">
+        <div class="chip-inner" id="chipInnerContainer">
+          <div class="chip-number" id="mainNumberDisplay">51</div>
+        </div>
+      </div>
+    </div>
+    <!-- Status / Time Bar -->
+    <div class="status-time" id="statusTimeDisplay">Closed</div>
+    <!-- 6 Cards Grid -->
+    <div class="cards-grid" id="cardsGridContainer"></div>
+    <!-- Footer Banner -->
+    <div class="footer-banner">
+      <hr>
+      <span>♠</span>
+      <span>Every Monday will be closed!</span>
+      <span>♠</span>
+      <hr>
+    </div>
+    <!-- History Full Screen View -->
+    <div id="historyFullScreen">
+      <div class="history-header">
+        <button class="history-back-btn" onclick="closeHistoryModal()">❮</button>
+        <div class="history-page-title">History</div>
+      </div>
+      <div id="historyContentContainer" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
+    </div>
+    <!-- Login Modal -->
+    <div class="admin-modal" id="loginModal">
+      <div class="admin-content" style="max-width: 300px; text-align: center;">
+        <h2>Admin Login</h2>
+        <div class="form-group">
+          <input type="password" id="adminPasswordInput" placeholder="Password" />
+        </div>
+        <button class="btn-primary" onclick="verifyAdminPassword()">ဝင်မည်</button>
+        <button class="btn-secondary" onclick="closeLoginModal()" style="background: #444;">ပိတ်မည်</button>
+      </div>
+    </div>
+    <!-- Admin Panel Modal -->
+    <div class="admin-modal" id="adminPanelModal">
+      <div class="admin-content">
+        <h2>Admin Control Panel</h2>
+        <div class="form-group">
+          <label>Live Pause / Resume:</label>
+          <button class="btn-primary" id="togglePauseBtn" onclick="togglePauseState()" style="background: #4caf50; color: #fff;">Live ဖွင့်ထားသည် (Pause လုပ်ရန်)</button>
+        </div>
+        <div class="form-group" style="margin-top: 10px;">
+          <label style="color: #ff5722;">App ပိတ်ရန် / ဖွင့်ရန်:</label>
+          <button class="btn-secondary" onclick="toggleAppClosedState()" id="appCloseToggleBtn" style="background: #d32f2f;">App ဖွင့်ထားသည် (ပိတ်ရန် နှိပ်ပါ)</button>
+        </div>
+        <hr style="border-color: #444; margin: 15px 0;">
+        <div class="form-group">
+          <label>သီးသန့်ရက်စွဲ ရွေးချယ်ရန်:</label>
+          <input type="date" id="adminDateSelector" onchange="loadDateConfigData()" />
+        </div>
+        <label style="color: #ffc107; font-weight: bold; margin-bottom: 5px; display: block;">အချိန်ကွက်အလိုက် ဂဏန်း၊ အိုင်ကွန်နှင့် ကြာချိန်</label>
+        <div id="adminSlotsConfig"></div>
+        <button class="btn-primary" onclick="saveAdminSettings()">သိမ်းဆည်းမည်</button>
+        <button class="btn-secondary" onclick="deleteDateConfigData()" style="background: #e65100;">ရွေးထားသောရက်စွဲ အချက်အလက် ဖျက်မည်</button>
+        <div class="form-group" style="margin-top: 15px;">
+          <label style="color: #ff5252;">History မှ ရက်စွဲအလိုက် ဖျက်ရန်:</label>
+          <select id="adminHistoryDateSelector" style="margin-bottom: 5px;"></select>
+          <button class="btn-secondary" onclick="deleteHistoryDateRecord()" style="background: #c62828;">ရွေးထားသော History ရက်စွဲ ဖျက်မည်</button>
+        </div>
+        <button class="btn-secondary" onclick="closeAdminPanel()" style="background: #444; margin-top: 10px;">ပိတ်မည်</button>
+      </div>
+    </div>
+
+    <script>
+    // ======= JSONBIN.IO CONFIGURATION =======
+    const JSONBIN_BIN_ID = "6acf2545ac6210605a2fe7eb";   // 
+    const JSONBIN_API_KEY = "$2a$10$T0fpoTCZmNEA9BPC49vkweKQaO10WcHCWNbuAuj8zvW2SzCs.IBxO"; // 
+    // ========================================
+
+    const slotTimes = ["16:00", "17:00", "18:00", "19:00", "20:00", "21:00"]; 
+    const slotLabels = ["4:00", "5:00", "6:00", "7:00", "8:00", "9:00"];
+
+    let appData = {
+        isPaused: false,
+        isAppClosed: false,
+        isAdminAuthenticated: false, 
+        dateOverrides: {}, 
+        historyLogs: {
+            "10/10/2026": [
+                { number: "38", icon: "♠", time: "5:00" },
+                { number: "56", icon: "♣", time: "6:00" },
+                { number: "11", icon: "♠", time: "7:00" },
+                { number: "13", icon: "♣", time: "8:00" },
+                { number: "58", icon: "♠", time: "9:00" },
+                { number: "71", icon: "♣", time: "10:00" }
+            ],
+            "11/10/2026": [
+                { number: "92", icon: "♠", time: "5:00" },
+                { number: "05", icon: "♣", time: "6:00" },
+                { number: "52", icon: "♠", time: "7:00" },
+                { number: "06", icon: "♣", time: "8:00" },
+                { number: "93", icon: "♠", time: "9:00" },
+                { number: "74", icon: "♣", time: "10:00" }
+            ]
+        },
+        slots: {
+            "16:00": { number: "03", icon: "♠", durationMins: 20 },
+            "17:00": { number: "32", icon: "♥", durationMins: 20 },
+            "18:00": { number: "69", icon: "♣", durationMins: 20 },
+            "19:00": { number: "73", icon: "♦", durationMins: 20 },
+            "20:00": { number: "01", icon: "joker", durationMins: 20 },
+            "21:00": { number: "51", icon: "♠", durationMins: 20 }
+        }
+    };
+
+    // Fetch data from Jsonbin.io on load and periodically
+    function fetchCloudData() {
+        fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest?t=` + new Date().getTime(), {
+            headers: {
+                'X-Master-Key': JSONBIN_API_KEY
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.record) {
+                let record = data.record;
+                appData.isPaused = record.isPaused ?? appData.isPaused;
+                appData.isAppClosed = record.isAppClosed ?? appData.isAppClosed;
+                appData.dateOverrides = record.dateOverrides || {};
+                appData.historyLogs = record.historyLogs || appData.historyLogs;
+                appData.slots = record.slots || appData.slots;
+                updateSystemTime();
+            }
+        })
+        .catch(err => console.log('Error fetching Jsonbin data:', err));
+    }
+
+    // Save data to Jsonbin.io when admin makes changes
+    function saveCloudData() {
+        if (!JSONBIN_BIN_ID || !JSONBIN_API_KEY) {
+            alert('Jsonbin Bin ID နှင့် Master Key ထည့်သွင်းရန် လိုအပ်ပါသည်။');
+            return;
+        }
+
+        fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_API_KEY
+            },
+            body: JSON.stringify({
+                isPaused: appData.isPaused,
+                isAppClosed: appData.isAppClosed,
+                dateOverrides: appData.dateOverrides,
+                historyLogs: appData.historyLogs,
+                slots: appData.slots
+            })
+        })
+        .then(res => {
+            if (!res.ok) alert('Cloud သို့ သိမ်းဆည်းမှု မအောင်မြင်ပါ။');
+        })
+        .catch(err => console.log('Error saving data:', err));
+    }
+
+    // Initialize cloud data fetch first, then set interval
+    fetchCloudData();
+    setInterval(fetchCloudData, 5000);
+
+    let pressTimer = null;
+    const brandTitleElem = document.getElementById('brandTitleElem');
+
+    brandTitleElem.addEventListener('mousedown', startLongPress);
+    brandTitleElem.addEventListener('touchstart', startLongPress);
+    brandTitleElem.addEventListener('mouseup', cancelLongPress);
+    brandTitleElem.addEventListener('mouseleave', cancelLongPress);
+    brandTitleElem.addEventListener('touchend', cancelLongPress);
+
+    function startLongPress(e) {
+        e.preventDefault();
+        pressTimer = setTimeout(() => {
+            checkAdminAccess();
+        }, 4000);
+    }
+
+    function cancelLongPress() {
+        if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+        }
+    }
+
+    function checkAdminAccess() {
+        if (appData.isAdminAuthenticated) {
+            openAdminPanel();
+        } else {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+    }
+
+    function verifyAdminPassword() {
+        const pwd = document.getElementById('adminPasswordInput').value;
+        if (pwd === '859042') {
+            appData.isAdminAuthenticated = true;
+            closeLoginModal();
+            document.getElementById('adminPasswordInput').value = '';
+            openAdminPanel();
+        } else {
+            alert('စကားဝှက် မှားယွင်းနေပါသည်။');
+        }
+    }
+
+    function openHistoryModal() {
+        const container = document.getElementById('historyContentContainer');
+        container.innerHTML = '';
+
+        let sortedDates = Object.keys(appData.historyLogs).sort((a, b) => {
+            let partsA = a.split('/');
+            let partsB = b.split('/');
+            let dateA = new Date(`${partsA[2]}-${partsA[1]}-${partsA[0]}`);
+            let dateB = new Date(`${partsB[2]}-${partsB[1]}-${partsB[0]}`);
+            return dateB - dateA;
+        });
+
+        sortedDates.forEach(dateKey => {
+            let items = appData.historyLogs[dateKey];
+            let gridHtml = '';
+            items.forEach(item => {
+                let colorStyle = (item.icon === '♥' || item.icon === '♦') ? 'color: #d32f2f;' : 'color: #fff;';
+                let iconDisplay = item.icon === 'joker' ? '🃏' : item.icon;
+                gridHtml += `
+                    <div class="history-card-box">
+                        <div class="history-card-top">${item.number}</div>
+                        <div class="history-card-center" style="${colorStyle}">${iconDisplay}</div>
+                        <div class="history-card-bottom">${item.time}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="history-date-section">
+                    <div class="history-date-title">${dateKey}</div>
+                    <div class="history-grid">${gridHtml}</div>
+                </div>
+            `;
+        });
+
+        document.getElementById('historyFullScreen').style.display = 'flex';
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyFullScreen').style.display = 'none';
+    }
+
+    function openAdminPanel() {
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('adminDateSelector').value = todayStr;
+        buildAdminSlotsForm(todayStr);
+        buildAdminHistoryDateDropdown();
+        updateAdminButtonsUI();
+        document.getElementById('adminPanelModal').style.display = 'flex';
+    }
+
+    function closeAdminPanel() {
+        document.getElementById('adminPanelModal').style.display = 'none';
+    }
+
+    function buildAdminHistoryDateDropdown() {
+        const selectElem = document.getElementById('adminHistoryDateSelector');
+        selectElem.innerHTML = '';
+        let sortedDates = Object.keys(appData.historyLogs).sort((a, b) => {
+            let partsA = a.split('/');
+            let partsB = b.split('/');
+            let dateA = new Date(`${partsA[2]}-${partsA[1]}-${partsA[0]}`);
+            let dateB = new Date(`${partsB[2]}-${partsB[1]}-${partsB[0]}`);
+            return dateB - dateA;
+        });
+
+        sortedDates.forEach(dateKey => {
+            selectElem.innerHTML += `<option value="${dateKey}">${dateKey}</option>`;
+        });
+    }
+
+    function deleteHistoryDateRecord() {
+        const selectElem = document.getElementById('adminHistoryDateSelector');
+        const targetDate = selectElem.value;
+        if (targetDate && appData.historyLogs[targetDate]) {
+            delete appData.historyLogs[targetDate];
+            alert(targetDate + ' ၏ History အချက်အလက်များကို ဖျက်ပြီးပါပြီ။');
+            buildAdminHistoryDateDropdown();
+            saveCloudData();
+        } else {
+            alert('ဖျက်ရန် ရက်စွဲ မရှိပါ။');
+        }
+    }
+
+    function togglePauseState() {
+        appData.isPaused = !appData.isPaused;
+        updateAdminButtonsUI();
+        saveCloudData();
+    }
+
+    function toggleAppClosedState() {
+        appData.isAppClosed = !appData.isAppClosed;
+        updateAdminButtonsUI();
+        updateSystemTime();
+        saveCloudData();
+    }
+
+    function updateAdminButtonsUI() {
+        const pauseBtn = document.getElementById('togglePauseBtn');
+        if (appData.isPaused) {
+            pauseBtn.style.background = '#d32f2f';
+            pauseBtn.innerText = 'Live ရပ်ထားသည် (Resume လုပ်ရန်)';
+        } else {
+            pauseBtn.style.background = '#4caf50';
+            pauseBtn.innerText = 'Live ဖွင့်ထားသည် (Pause လုပ်ရန်)';
+        }
+
+        const closeBtn = document.getElementById('appCloseToggleBtn');
+        if (appData.isAppClosed) {
+            closeBtn.style.background = '#4caf50';
+            closeBtn.innerText = 'App ပိတ်ထားသည် (ဖွင့်ရန် နှိပ်ပါ)';
+        } else {
+            closeBtn.style.background = '#d32f2f';
+            closeBtn.innerText = 'App ဖွင့်ထားသည် (ပိတ်ရန် နှိပ်ပါ)';
+        }
+    }
+
+    function loadDateConfigData() {
+        const selectedDate = document.getElementById('adminDateSelector').value;
+        buildAdminSlotsForm(selectedDate);
+    }
+
+    function buildAdminSlotsForm(dateStr) {
+        const container = document.getElementById('adminSlotsConfig');
+        container.innerHTML = '';
+        
+        let slotSource = appData.slots;
+        if (appData.dateOverrides[dateStr]) {
+            slotSource = appData.dateOverrides[dateStr];
+        }
+
+        slotTimes.forEach((timeKey, idx) => {
+            const slot = slotSource[timeKey] || appData.slots[timeKey];
+            container.innerHTML += `
+                <div class="slot-row">
+                    <span>${slotLabels[idx]}</span>
+                    <input type="text" id="admin_num_${timeKey}" value="${slot.number}" maxlength="2" placeholder="ဂဏန်း" style="width: 50px;">
+                    <select id="admin_icon_${timeKey}" style="width: 85px;">
+                        <option value="♠" ${slot.icon==='♠'?'selected':''}>♠ Spades</option>
+                        <option value="♥" ${slot.icon==='♥'?'selected':''}>♥ Hearts</option>
+                        <option value="♣" ${slot.icon==='♣'?'selected':''}>♣ Clubs</option>
+                        <option value="♦" ${slot.icon==='♦'?'selected':''}>♦ Diamonds</option>
+                        <option value="joker" ${slot.icon==='joker'?'selected':''}>🃏 Joker</option>
+                    </select>
+                    <input type="number" id="admin_dur_${timeKey}" value="${slot.durationMins || 20}" min="1" max="1440" placeholder="မိနစ်" style="width: 60px;" title="ကြာချိန်">
+                </div>
+            `;
+        });
+    }
+
+    function saveAdminSettings() {
+        const selectedDate = document.getElementById('adminDateSelector').value;
+        if (!appData.dateOverrides[selectedDate]) {
+            appData.dateOverrides[selectedDate] = JSON.parse(JSON.stringify(appData.slots));
+        }
+
+        slotTimes.forEach((timeKey) => {
+            const numInput = document.getElementById(`admin_num_${timeKey}`).value;
+            const iconInput = document.getElementById(`admin_icon_${timeKey}`).value;
+            const durInput = parseInt(document.getElementById(`admin_dur_${timeKey}`).value) || 20;
+            
+            if(numInput) {
+                appData.dateOverrides[selectedDate][timeKey] = {
+                    number: numInput,
+                    icon: iconInput,
+                    durationMins: durInput
+                };
+                appData.slots[timeKey] = {
+                    number: numInput,
+                    icon: iconInput,
+                    durationMins: durInput
+                };
+            }
+        });
+        alert('အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။');
+        closeAdminPanel();
+        updateSystemTime();
+        saveCloudData();
+    }
+
+    function deleteDateConfigData() {
+        const selectedDate = document.getElementById('adminDateSelector').value;
+        if (appData.dateOverrides[selectedDate]) {
+            delete appData.dateOverrides[selectedDate];
+            alert(selectedDate + ' အတွက် သီးသန့်သတ်မှတ်ချက်ကို ဖျက်ပြီးပါပြီ။');
+            buildAdminSlotsForm(selectedDate);
+            updateSystemTime();
+            saveCloudData();
+        } else {
+            alert('ဤရက်စွဲအတွက် သီးသန့်သိမ်းဆည်းထားခြင်း မရှိပါ။');
+        }
+    }
+
+    function getSyncedRandomNumber() {
+        const nowUtcSec = Math.floor(Date.now() / 5000);
+        const x = Math.sin(nowUtcSec) * 10000;
+        const rnd = Math.floor((x - Math.floor(x)) * 90) + 10;
+        return rnd.toString();
+    }
+
+    function updateSystemTime() {
+        const now = new Date();
+        const optionsTime = { timeZone: 'Asia/Rangoon', hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' };
+        const optionsDate = { timeZone: 'Asia/Rangoon', year: 'numeric', month: '2-digit', day: '2-digit' };
+        
+        const timeString12 = now.toLocaleTimeString('en-US', optionsTime);
+        const dateParts = now.toLocaleDateString('en-GB', optionsDate).split('/'); 
+        const formattedDate = `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
+        const isoDateStr = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+        let activeSlotsSource = appData.slots;
+        if (appData.dateOverrides[isoDateStr]) {
+            activeSlotsSource = appData.dateOverrides[isoDateStr];
+        }
+
+        let currentDayKey = `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
+        if (!appData.historyLogs[currentDayKey]) {
+            appData.historyLogs[currentDayKey] = [];
+        }
+
+        const myanmarHoursStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Rangoon', hour12: false, hour: '2-digit' });
+        const myanmarMinsStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Rangoon', minute: '2-digit' });
+        
+        const currentHours = parseInt(myanmarHoursStr, 10);
+        const currentMinutes = parseInt(myanmarMinsStr, 10);
+        const currentTotalMins = (currentHours * 60) + currentMinutes;
+
+        slotTimes.forEach((tKey, idx) => {
+            let [sHour, sMin] = tKey.split(':').map(Number);
+            let slotTotalMins = (sHour * 60) + sMin;
+            let slotDuration = activeSlotsSource[tKey].durationMins || 20;
+            
+            if (currentTotalMins >= (slotTotalMins + slotDuration)) {
+                let slotData = activeSlotsSource[tKey];
+                let exists = appData.historyLogs[currentDayKey].some(item => item.time === slotLabels[idx]);
+                if (!exists) {
+                    appData.historyLogs[currentDayKey].push({
+                        number: slotData.number,
+                        icon: slotData.icon,
+                        time: slotLabels[idx]
+                    });
+                    saveCloudData();
+                }
+            }
+        });
+
+        if (appData.isAppClosed) {
+            let lastKey = slotTimes[slotTimes.length - 1];
+            let finalSlot = activeSlotsSource[lastKey] || { number: "51", icon: "♠" };
+
+            document.getElementById('setValue').innerText = `SET: 3739.${finalSlot.number.charAt(0)}`;
+            document.getElementById('valueNum').innerText = `VALUE: 3845.${finalSlot.number.charAt(1)}`;
+            document.getElementById('mainNumberDisplay').innerText = finalSlot.number;
+            document.getElementById('statusTimeDisplay').innerText = `Closed: ${formattedDate}`;
+            
+            document.getElementById('goldChipContainer').className = 'gold-chip chip-stopped';
+            document.getElementById('chipInnerContainer').className = 'chip-inner chip-stopped-inner';
+            document.getElementById('mainNumberDisplay').className = 'chip-number';
+
+            renderCardsGrid(9999, activeSlotsSource);
+            return;
+        }
+
+        let activeClosedSlot = null;
+        let currentDisplayNum = getSyncedRandomNumber();
+        let isChipSpinning = true;
+
+        for (let i = 0; i < slotTimes.length; i++) {
+            let tKey = slotTimes[i];
+            let [sHour, sMin] = tKey.split(':').map(Number);
+            let slotTotalMins = (sHour * 60) + sMin;
+            
+            let slotDuration = activeSlotsSource[tKey].durationMins || 20;
+            let diffMins = currentTotalMins - slotTotalMins;
+
+            if (diffMins >= 0 && diffMins < slotDuration) {
+                activeClosedSlot = tKey;
+                currentDisplayNum = activeSlotsSource[tKey].number;
+                isChipSpinning = false;
+                break;
+            }
+        }
+
+        const statusDisplay = document.getElementById('statusTimeDisplay');
+        if (activeClosedSlot) {
+            let [sh, sm] = activeClosedSlot.split(':');
+            let hNum = parseInt(sh);
+            let cAmpm = hNum >= 12 ? 'PM' : 'AM';
+            let cH12 = hNum % 12 || 12;
+            statusDisplay.innerText = `Closed: ${formattedDate} ${cH12}:${sm===0?'00':sm} ${cAmpm}`;
+        } else {
+            if (appData.isPaused) {
+                statusDisplay.innerText = `**Paused: ${formattedDate} ${timeString12}`;
+            } else {
+                statusDisplay.innerText = `**Live: ${formattedDate} ${timeString12}`;
+            }
+        }
+
+        const chipContainer = document.getElementById('goldChipContainer');
+        const innerContainer = document.getElementById('chipInnerContainer');
+        const mainNumElem = document.getElementById('mainNumberDisplay');
+        mainNumElem.innerText = currentDisplayNum;
+
+        let firstDigit = currentDisplayNum.charAt(0) || '0';
+        let secondDigit = currentDisplayNum.charAt(1) || '0';
+
+        document.getElementById('setValue').innerText = `SET: 3739.${firstDigit}`;
+        document.getElementById('valueNum').innerText = `VALUE: 3845.${secondDigit}`;
+
+        if (isChipSpinning && !appData.isPaused) {
+            chipContainer.className = 'gold-chip chip-spinning';
+            innerContainer.className = 'chip-inner'; 
+            mainNumElem.className = 'chip-number blinking';
+        } else {
+            chipContainer.className = 'gold-chip chip-stopped';
+            innerContainer.className = 'chip-inner chip-stopped-inner';
+            mainNumElem.className = 'chip-number';
+        }
+
+        renderCardsGrid(currentTotalMins, activeSlotsSource);
+    }
+
+    function renderCardsGrid(currentTotalMins, activeSlotsSource) {
+        const grid = document.getElementById('cardsGridContainer');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        slotTimes.forEach((tKey, idx) => {
+            let slot = activeSlotsSource[tKey];
+            let [sHour, sMin] = tKey.split(':').map(Number);
+            let hNum = parseInt(sHour);
+            let h12 = hNum % 12 || 12;
+            let displayTimeLabel = `${h12}:${sMin === 0 ? '00' : sMin}`;
+
+            let slotTotalMins = (sHour * 60) + sMin;
+            let slotDuration = slot.durationMins || 20;
+            let diffMins = currentTotalMins - slotTotalMins;
+
+            let topText = "";
+            let centerIconHtml = "";
+            let colorStyle = (slot.icon === '♥' || slot.icon === '♦') ? 'color: #d32f2f;' : 'color: #fff;';
+
+            if (appData.isAppClosed || diffMins >= 0) {
+                topText = slot.number;
+                centerIconHtml = slot.icon === 'joker' ? `<span style="font-size: 24px;">🃏</span>` : `<span style="font-size: 24px; ${colorStyle}">${slot.icon}</span>`;
+            } else {
+                topText = "**";
+                centerIconHtml = slot.icon === 'joker' ? `<span style="font-size: 24px;">🃏</span>` : `<span style="font-size: 24px; ${colorStyle}">${slot.icon}</span>`;
+            }
+
+            grid.innerHTML += `
+                <div class="card-box">
+                    <div class="card-top-text">${topText}</div>
+                    <div class="card-center-icon">${centerIconHtml}</div>
+                    <div class="card-bottom-time">${displayTimeLabel}</div>
+                </div>
+            `;
+        });
+    }
+
+    setInterval(updateSystemTime, 1000);
+    updateSystemTime();
+    </script>
+  </body>
+</html>
