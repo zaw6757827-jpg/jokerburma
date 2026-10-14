@@ -459,8 +459,8 @@
 
     <script>
     // ======= JSONBIN.IO CONFIGURATION =======
-    const JSONBIN_BIN_ID = "6acf2545ac6210605a2fe7eb";   // 
-    const JSONBIN_API_KEY = "$2a$10$T0fpoTCZmNEA9BPC49vkweKQaO10WcHCWNbuAuj8zvW2SzCs.IBxO"; // 
+    const JSONBIN_BIN_ID = "6acf2545ac6210605a2fe7eb";   
+    const JSONBIN_API_KEY = "$2a$10$T0fpoTCZmNEA9BPC49vkweKQaO10WcHCWNbuAuj8zvW2SzCs.IBxO"; 
     // ========================================
 
     const slotTimes = ["16:00", "17:00", "18:00", "19:00", "20:00", "21:00"]; 
@@ -499,8 +499,13 @@
         }
     };
 
-    // Fetch data from Jsonbin.io on load and periodically
+    // Fetch data from Jsonbin.io (Admin Panel ဖွင့်ထားချိန်တွင် auto-fetch လုပ်ခြင်းကို ခေတ္တရပ်ထားမည်)
     function fetchCloudData() {
+        const adminModal = document.getElementById('adminPanelModal');
+        if (adminModal && adminModal.style.display === 'flex') {
+            return; // Admin Panel ဖွင့်ပြီးပြင်နေစဉ် ဒေတာအဟောင်းနဲ့ overwrite ဖြစ်ခြင်းကို ကာကွယ်ရန်
+        }
+
         fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest?t=` + new Date().getTime(), {
             headers: {
                 'X-Master-Key': JSONBIN_API_KEY
@@ -543,7 +548,9 @@
             })
         })
         .then(res => {
-            if (!res.ok) alert('Cloud သို့ သိမ်းဆည်းမှု မအောင်မြင်ပါ။');
+            if (!res.ok) {
+                alert('Cloud သို့ သိမ်းဆည်းမှု မအောင်မြင်ပါ။');
+            }
         })
         .catch(err => console.log('Error saving data:', err));
     }
@@ -775,8 +782,8 @@
         });
         alert('အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။');
         closeAdminPanel();
+        saveCloudData(); // Cloud သို့ချက်ချင်း သိမ်းမည်
         updateSystemTime();
-        saveCloudData();
     }
 
     function deleteDateConfigData() {
@@ -785,8 +792,8 @@
             delete appData.dateOverrides[selectedDate];
             alert(selectedDate + ' အတွက် သီးသန့်သတ်မှတ်ချက်ကို ဖျက်ပြီးပါပြီ။');
             buildAdminSlotsForm(selectedDate);
-            updateSystemTime();
             saveCloudData();
+            updateSystemTime();
         } else {
             alert('ဤရက်စွဲအတွက် သီးသန့်သိမ်းဆည်းထားခြင်း မရှိပါ။');
         }
@@ -926,7 +933,7 @@
         if (!grid) return;
         grid.innerHTML = '';
 
-        slotTimes.forEach((tKey, idx) => {
+.slotTimes.forEach((tKey, idx) => {
             let slot = activeSlotsSource[tKey];
             let [sHour, sMin] = tKey.split(':').map(Number);
             let hNum = parseInt(sHour);
