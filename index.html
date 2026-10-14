@@ -933,7 +933,7 @@
         if (!grid) return;
         grid.innerHTML = '';
 
-.slotTimes.forEach((tKey, idx) => {
+        slotTimes.forEach((tKey, idx) => {
             let slot = activeSlotsSource[tKey];
             let [sHour, sMin] = tKey.split(':').map(Number);
             let hNum = parseInt(sHour);
